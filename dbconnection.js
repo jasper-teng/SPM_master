@@ -1,28 +1,24 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
-require('dotenv').config();
-const uri = process.env.uri;
+require("dotenv").config();
+const { Sequelize } = require("sequelize");
+const { test } = require("./models/user");
+const db_url = process.env.DATABASE_URL;
+const sequelize = new Sequelize(db_url);
 
-
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
+exports.dbHealthCheck = async function fuckme() {
+  try {
+    await sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+    return
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+    return error
   }
-});
+};
 
 
-exports.mongodbHealthCheck = async function fuckme() {
-    try {
-        // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
-        // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log(
-            "Pinged your deployment. You successfully connected to MongoDB!"
-        );
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-    }
+exports.testCRUD = async function help(){
+  const rah = test.build({id: 4});
+  console.log(rah.toJSON());
+  await rah.save();
+  return "ok";
 }
