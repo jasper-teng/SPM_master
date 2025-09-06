@@ -6,7 +6,7 @@ require('dotenv').config();
 const secret = process.env.jwtsecret;
 
 const tokenverification = (req, res, next) => {
-    const nonSecurePaths = ["/healthcheck","/dbconntest","/login", "/", "/testCRUD"];
+    const nonSecurePaths = ["/healthcheck","/dbconntest","/login", "/", "/testCRUD", "/slave"];
     //console.log(req.cookies);
 
     //const { authToken } = req.cookies;
